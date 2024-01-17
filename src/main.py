@@ -12,6 +12,18 @@ def recognize_entities(text):
 
     return entities
 
+def anonymize_entities(text, entities):
+    # Replace recognized entities with generic names
+    anonymized_text = text
+    idx = 0
+    for entity, label in entities:
+        if label == "PERSON":
+            # Replace with a generic name like "Person A"
+            anonymized_text = anonymized_text.replace(entity, f"Person {chr(ord('A')+idx)}")
+            idx+=1
+    
+    return anonymized_text
+
 # Example text
 law_article = """
 In a landmark case, John Doe was accused of financial fraud. 
