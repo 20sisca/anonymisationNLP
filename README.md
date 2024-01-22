@@ -1,9 +1,7 @@
 # anonymisationNLP
 Academic law project to anonymise names in law texts
 
-pip install -U spacy 
-
-python -m spacy download fr_core_news_sm
+pip install -r requirements.txt
 
 python src/main.py
 

@@ -16,7 +16,7 @@ def extract_text_from_markdown(markdown_content):
     
     return text_content
 
-markdown_file_path = 'data/021018_1682318_1_CC.md'
+markdown_file_path = 'data/021018_1684802_5_CC.md'
 markdown_content = read_markdown_file(markdown_file_path)
 text_content = extract_text_from_markdown(markdown_content)
 def merge_compound_names(entities):
@@ -47,13 +47,20 @@ def recognize_entities_and_pronouns(text):
 
     # Extract named entities, their labels, and pronouns
     entities_and_pronouns = []
+    
     for token in doc:
+        print(token)
         if token.ent_type_:
+            if token.ent_type_ == "PER":
+                print('-----------')
+                print(token.text)
+                print('-----------')
             entities_and_pronouns.append((token.text, token.ent_type_))
         elif token.pos_ == "PRON":
             entities_and_pronouns.append((token.text, "PRON"))
 
     # Merge consecutive entities with the same label
+    print(entities_and_pronouns)
     entities_and_pronouns = merge_compound_names(entities_and_pronouns)
 
     return entities_and_pronouns
