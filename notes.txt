@@ -1,0 +1,6 @@
+As we look at the datasets, we'll write down the different patterns that might help us recognizing the names, in particular the suspect.
+
+So the dataset includes law texts published at the end of 2018/beginning of 2019
+
+An idea that we could explore: retrieve a set of anonymised texts from judilibre. In those texts, we replace all the generic names with fake names: for instance "par Adama X..., domicilié chez Mme Florence Y..." would become "par Adama Traore, domicilié chez Mme Florence Dupont". And in the same time, we label Florence Dupont and Adama Traore as a new entity type "PROTAGONIST".
+Then we could train our spacy model on this new annotated dataset.
