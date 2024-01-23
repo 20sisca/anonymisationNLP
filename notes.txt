@@ -4,3 +4,20 @@ So the dataset includes law texts published at the end of 2018/beginning of 2019
 
 An idea that we could explore: retrieve a set of anonymised texts from judilibre. In those texts, we replace all the generic names with fake names: for instance "par Adama X..., domicilié chez Mme Florence Y..." would become "par Adama Traore, domicilié chez Mme Florence Dupont". And in the same time, we label Florence Dupont and Adama Traore as a new entity type "PROTAGONIST".
 Then we could train our spacy model on this new annotated dataset.
+
+How does judilibre anonymise the names of the protagonists?
+We can notice that in the texts, each name has a corresponding upper case letter, sometimes preceded by the first name and "M." or "Mme" depending on the genre.
+Here is an example: "les salaires des jours de carence de M. Y... en 2014 et 2015, de M. Laurent Z... en 2013 et Mme Sabrina A... en 2013"
+
+First step:
+  - Identify hidden names
+  Here, we need to be careful and have in mind that the first name is optional. "M. Y..." appears after as "M. Pascal Y...", so with more information.
+
+Second step:
+  - Replace hidden names with fake ones. "M. Laurent Z..." becomes randomly "M. Laurent Buvot", "M. Y..." and "M. Pascal Y..." become "M. Xavier Dupont"
+
+Third step:
+  - Create a new label type "PROTAGONIST" and annotate the generated names with this label. 
+
+4th step
+  - Train the spacy model on our new annotated dataset (so only one label) so that it can recognize those entities in any other similar text.
