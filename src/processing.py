@@ -23,9 +23,9 @@ def find_anonymised_names(arret):
     for combination in combined_names:
         if combination[1] not in charByLastName:
             charByLastName[combination[1]] = dict()
-            charByLastName[combination[1]]["first_name"] = [combination[0]]
+            charByLastName[combination[1]]["first_name"] = set(combination[0])
         else:
-            charByLastName[combination[1]]["first_name"].append(combination[0])
+            charByLastName[combination[1]]["first_name"].add(combination[0])
         if combination[0] in isolated_names:
             isolated_names.remove(combination[0])
 
@@ -45,6 +45,12 @@ def find_anonymised_names(arret):
     return charByLastName
 
 
+red = "\033[31m"
+green = "\033[32m"
+blue = "\033[34m"
+reset = "\033[39m"
+
+
 def replace_letters_with_fake_names(arret, people_by_last_name):
     # print('-------------------------')
     # print(people_by_last_name, arret)
@@ -52,18 +58,20 @@ def replace_letters_with_fake_names(arret, people_by_last_name):
     for last_name, info in people_by_last_name.items():
         # print(last_name)
         fake = Faker('fr_FR')
-        fake_name = fake.last_name()
+        fake_name = red + fake.last_name() + reset
         # print('-------------------------')
         # print(fake_name, info)
-        modif_arret = modif_arret.replace(f"[{last_name}]", fake_name)
+        modif_arret = modif_arret.replace(
+            f"[{last_name}]", last_name + " "+fake_name)
         # print(modif_arret)
         if "first_name" in info:
 
             print('gonna replace first', info.get("first_name"))
             for first_name in info.get('first_name'):
-                fake_name = fake.first_name()
+                fake_name = green + fake.first_name()+reset
+                print('NNNNNNNN', fake_name)
                 modif_arret = modif_arret.replace(
-                    f"[{first_name}]", fake_name)
+                    f"[{first_name}]", first_name+" "+fake_name)
 
     # print(modif_arret)
     return modif_arret
