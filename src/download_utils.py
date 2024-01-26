@@ -4,6 +4,7 @@ import os
 import time
 import json
 import requests
+from arret import Arret
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -114,7 +115,10 @@ data = download_data_between_update_dates(
     '2022-02-01', '2022-02-04', timeout=1)
 # firstRep = download_specific_document_by_id(data.get('id')[0])
 
-print(json.dumps(data, indent=4), type(data))
+for arretDict in data[:10][0]:
+    arret = Arret(identifier=arretDict.get('id'), text=arretDict.get('text'))
+    print(arret.text)
+# print(json.dumps(data, indent=4), type(data))
 # print(firstRep)
 
 # Serializing json
