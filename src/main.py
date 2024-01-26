@@ -2,23 +2,29 @@ import spacy
 from bs4 import BeautifulSoup
 import markdown2
 
+
 def read_markdown_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         markdown_content = file.read()
     return markdown_content
 
+
 def extract_text_from_markdown(markdown_content):
     html_content = markdown2.markdown(markdown_content)
-    
+
     # If you have more complex Markdown content, you may need to extract text differently
     # This is a simple example that removes HTML tags
-    text_content = ''.join(BeautifulSoup(html_content, 'html.parser').findAll(text=True))
-    
+    text_content = ''.join(BeautifulSoup(
+        html_content, 'html.parser').findAll(text=True))
+
     return text_content
+
 
 markdown_file_path = 'data/021018_1684802_5_CC.md'
 markdown_content = read_markdown_file(markdown_file_path)
 text_content = extract_text_from_markdown(markdown_content)
+
+
 def merge_compound_names(entities):
     # Merge consecutive entities with the same label
     merged_entities = []
@@ -38,6 +44,7 @@ def merge_compound_names(entities):
 
     return merged_entities
 
+
 def recognize_entities_and_pronouns(text):
     # Load SpaCy French model
     nlp = spacy.load("fr_core_news_sm")
@@ -47,7 +54,7 @@ def recognize_entities_and_pronouns(text):
 
     # Extract named entities, their labels, and pronouns
     entities_and_pronouns = []
-    
+
     for token in doc:
         print(token)
         if token.ent_type_:
@@ -65,6 +72,7 @@ def recognize_entities_and_pronouns(text):
 
     return entities_and_pronouns
 
+
 def anonymize_entities_and_pronouns(text, entities_and_pronouns):
     # Dictionary to store mappings from names to letters
     name_to_letter = {}
@@ -79,12 +87,14 @@ def anonymize_entities_and_pronouns(text, entities_and_pronouns):
 
         if label == "PER":
             # Replace with the assigned letter
-            anonymized_text = anonymized_text.replace(entity, name_to_letter[entity])
+            anonymized_text = anonymized_text.replace(
+                entity, name_to_letter[entity])
         elif label == "PRON":
             # Replace with neutral pronouns
             anonymized_text = anonymized_text.replace(entity, "they")
 
     return anonymized_text
+
 
 # Example text (in French)
 law_article = """
@@ -97,8 +107,8 @@ M. Jean-Pierre Rognon, époux de Foix, est également impliqué dans l'affaire.
 entities_and_pronouns = recognize_entities_and_pronouns(text_content)
 print(entities_and_pronouns)
 # Anonymize entities and pronouns in the text
-anonymized_text = anonymize_entities_and_pronouns(text_content, entities_and_pronouns)
+anonymized_text = anonymize_entities_and_pronouns(
+    text_content, entities_and_pronouns)
 
 # Display the anonymized text
 print(anonymized_text)
-

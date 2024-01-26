@@ -2,7 +2,7 @@ import datetime
 import logging
 import os
 import time
-
+import json
 import requests
 from dotenv import load_dotenv
 
@@ -49,13 +49,14 @@ def download_data_between_update_dates(
     n_results = 0
 
     has_next_batch = True
+    aux = []
 
     while has_next_batch:
-        print("before requesting to ", f"{base_url}/export")
+        # print("before requesting to ", f"{base_url}/export")
         response = requests.get(
             url=f"{base_url}/export", headers=headers, params=params
         )
-        print("after requesting")
+        # print("after requesting")
 
         if response.status_code != 200:
             print('bad request', response.status_code)
@@ -69,7 +70,8 @@ def download_data_between_update_dates(
             has_next_batch = response_json["next_batch"] is not None
 
             results = response_json["results"]
-            print(results)
+            aux.append(results)
+            # print(results)
 
             for r in results:
                 n_results += 1
@@ -81,7 +83,11 @@ def download_data_between_update_dates(
     logging.debug(
         f"Collected {n_results} decisions from {start_date} to {end_date}")
 
-    return data
+    # aux[0][i] being un decret
+    # print(aux, len(aux), type(aux), aux[0], type(
+    #     aux[0][0]), json.dumps(aux[0][1], indent=4))
+    return [aux[0]]
+    # return data
 
 
 def download_specific_document_by_id(
@@ -104,4 +110,16 @@ def download_specific_document_by_id(
     return dict()
 
 
-download_data_between_update_dates('2023-01-01', '2023-01-03', timeout=1)
+data = download_data_between_update_dates(
+    '2023-01-01', '2023-01-03', timeout=1)
+# firstRep = download_specific_document_by_id(data.get('id')[0])
+
+print(json.dumps(data, indent=4), type(data))
+# print(firstRep)
+
+# Serializing json
+json_object = json.dumps(data[:10], indent=4)
+
+# Writing to sample.json
+with open("arrets.json", "w") as outfile:
+    outfile.write(json_object)
