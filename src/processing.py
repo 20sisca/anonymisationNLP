@@ -61,12 +61,15 @@ def replace_letters_with_fake_names(arret: Arret, people_by_last_name):
     for last_name, info in people_by_last_name.items():
         # print(last_name)
         fake = Faker('fr_FR')
-        fake_name = red + fake.last_name() + reset
+        fake_name = fake.last_name()
+        fake_name_with_color = red + " " + fake_name + " "+reset
         # print('-------------------------')
         # print(fake_name, info)
         modif_arret = modif_arret.replace(
-            f"[{last_name}]", last_name + " "+fake_name)
-        for match in re.findall(fr'\b{re.escape(fake_name)}\b', modif_arret):
+            f"[{last_name}]", last_name + " "+fake_name_with_color)
+        print('ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', re.findall(
+            fr'\b{re.escape(fake_name)}\b', modif_arret, flags=re.IGNORECASE))
+        for match in re.finditer(fr'\b{re.escape(fake_name)}\b', modif_arret):
 
             arret.protagonistsPositions.append((match.start(), match.end()))
         # print(modif_arret)
@@ -74,11 +77,14 @@ def replace_letters_with_fake_names(arret: Arret, people_by_last_name):
 
             print('gonna replace first', info.get("first_name"))
             for first_name in info.get('first_name'):
-                fake_name = green + fake.first_name()+reset
+                fake_name = fake.first_name()
+                fake_name_with_color = green + " " + fake_name + " "+reset
                 print('NNNNNNNN', fake_name)
                 modif_arret = modif_arret.replace(
-                    f"[{first_name}]", first_name+" "+fake_name)
+                    f"[{first_name}]", first_name+" "+fake_name_with_color)
 
+                print('ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', re.findall(
+                    fr'\b{re.escape(fake_name)}\b', modif_arret, flags=re.IGNORECASE))
                 for match in re.finditer(rf'\b{re.escape(fake_name)}\b', modif_arret):
 
                     arret.protagonistsPositions.append(
