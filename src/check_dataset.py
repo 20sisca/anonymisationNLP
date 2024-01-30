@@ -1,5 +1,5 @@
 import json 
-with open('dataset.json', 'r') as arrets:
+with open('dataset2.json', 'r') as arrets:
     data = json.load(arrets)
 
 print(len(data))
@@ -20,7 +20,7 @@ def check_no_overlap(arret, intervals):
     # Check for overlap
     for i in range(1, len(sorted_intervals)):
         if sorted_intervals[i][0] < sorted_intervals[i-1][1]:
-            print(arret.get("text")[sorted_intervals[i][0]-10:sorted_intervals[i][0]+10],
+            print(arret.get("text")[sorted_intervals[i][0]-50:sorted_intervals[i][0]+50],
                 sorted_intervals[i-1:i+1], 
                  arret.get("text")[sorted_intervals[i][0]],
                  arret.get("text")[sorted_intervals[i][1]],

@@ -58,13 +58,12 @@ reset = "\033[39m"
 def replace_letters_with_fake_names(arret: Arret, people_by_last_name):
     # print('-------------------------')
     # print(people_by_last_name, arret)
-    modif_arret = arret.text
     for last_name, info in people_by_last_name.items():
         # print(last_name)
         fake = Faker('fr_FR')
         fake_name = fake.last_name()
         fake_name_with_color = red + " " + fake_name + " "+reset
-        modif_arret = modif_arret.replace(
+        arret.text = arret.text.replace(
             f"[{last_name}]", fake_name)
         people_by_last_name[last_name]["fake_last_name"] = fake_name
         if "first_name" in info:
@@ -73,20 +72,22 @@ def replace_letters_with_fake_names(arret: Arret, people_by_last_name):
             for first_name in info.get('first_name').keys():
                 fake_name = fake.first_name()
                 fake_name_with_color = green + " " + fake_name + " "+reset
-                modif_arret = modif_arret.replace(
+                arret.text = arret.text.replace(
                     f"[{first_name}]", fake_name)
                 people_by_last_name[last_name]["first_name"][first_name] = fake_name
 
-
+    # print(modif_arret,sep="NNNNNNNNNNNNNNNNNNNNNN")
+    # arret.text = modif_arret
     find_protagonists_positions(people_by_last_name, arret)
-    arret.text = modif_arret
     return arret
 
 
 import sys
 
 def find_protagonists_positions(people_by_last_name, arret: Arret):
+    # print(people_by_last_name, arret.text)
     for last_name, info in people_by_last_name.items():
+        # print(last_name,info, 'ce qu on cherche',people_by_last_name[last_name]["fake_last_name"])
         # try:
         for match in re.finditer(fr'\b{re.escape(people_by_last_name[last_name]["fake_last_name"])}\b', arret.text):
             arret.protagonistsPositions.append((match.start(), match.end()))
@@ -110,7 +111,7 @@ def process_arret(arret: Arret):
 
 dataset = []
 
-
+print(len(data[:10][0][:10]))
 for arretDict in data[:10][0]:
     print('new arret')
     arret = Arret(identifier=arretDict.get('id'), text=arretDict.get('text'))
@@ -122,6 +123,6 @@ for arretDict in data[:10][0]:
 # Serializing json
 json_object = json.dumps(dataset, indent=4, default=lambda obj: obj.__dict__)
 
-with open("dataset.json", "w") as outfile:
+with open("dataset2.json", "w") as outfile:
     outfile.write(json_object)
     
