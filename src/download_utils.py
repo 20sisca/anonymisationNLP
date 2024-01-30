@@ -112,17 +112,17 @@ def download_specific_document_by_id(
 
 
 data = download_data_between_update_dates(
-    '2022-02-01', '2022-02-04', timeout=1)
+    '2022-01-01', '2023-01-01', timeout=5)
 # firstRep = download_specific_document_by_id(data.get('id')[0])
 
-for arretDict in data[:10][0]:
-    arret = Arret(identifier=arretDict.get('id'), text=arretDict.get('text'))
-    print(arret.text)
+#for arretDict in data[:10][0]:
+#    arret = Arret(identifier=arretDict.get('id'), text=arretDict.get('text'))
+#    print(arret.text)
 # print(json.dumps(data, indent=4), type(data))
 # print(firstRep)
 
 # Serializing json
-json_object = json.dumps(data[:10], indent=4)
+json_object = json.dumps(data, indent=4)
 
 # Writing to sample.json
 with open("arrets.json", "w") as outfile:
