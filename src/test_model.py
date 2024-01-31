@@ -10,6 +10,23 @@ from spacy import displacy
 # Load the trained model from the saved directory
 
 
+def colorize_text(text, words_to_color, color_code="\033[91m"):
+    """
+    Colorize specific words in the given text.
+
+    Parameters:
+    - text (str): The input text.
+    - words_to_color (list): List of words to be colorized.
+    - color_code (str): ANSI escape code for color. Default is red.
+
+    Returns:
+    - str: Colorized text.
+    """
+    for word in words_to_color:
+        text = text.replace(word, f"{color_code}{word}\033[0m")
+    return text
+
+
 def convert_markdown_to_text_and_save(file_path):
     try:
         # Generate the output text file path
@@ -60,6 +77,12 @@ if __name__ == "__main__":
     # import webbrowser
     #
     # webbrowser.open(html_file_path)
-    print(text)
+    options = {"ents": ["PROTAGONISTS"], "colors": {"PROTAGONISTS": "green"}}
+    displacy.render(doc, style="ent", options=options)
+    # print(text)
+    ents = set()
     for ent in doc.ents:
+        ents.add(ent.text)
         print(f"Entity: {ent.text}, Label: {ent.label_}")
+    colorised_text = colorize_text(text, ents)
+    print(colorised_text)
